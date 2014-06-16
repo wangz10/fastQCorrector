@@ -3,21 +3,19 @@ import gzip
 
 
 def _fastQVlidator(lines):
-	nucleotides = set(['A','T','C','G'])
-	assert len(lines) == 4
+	## asserting the reads (4 consecutive lines of fastq file)
 	assert lines[0].startswith('@')
-	assert set(lines[1]) | nucleotides == nucleotides
-	assert set(lines[2]).startswith('+')
+	assert lines[2].startswith('+')
 	assert len(lines[3]) == len(lines[1])
 
 
-def _readFourLines(f):	
-	f = iter(f)
+def _readFourLines(f):
+	## a four-line window for reading fastq file
 	while True:
 		lines = [None] * 4
 		for i in range(4):
 			try:
-				lines[i] = f.next()
+				lines[i] = next(f)
 			except StopIteration:
 				return
 		try:
@@ -32,7 +30,7 @@ def correcter(f, outfn):
 	# f is the handle of .fastq file or .fastq.gz file
 	with open (outfn, 'wb') as out:
 		for lines in _readFourLines(f):
-			out.write(lines)
+			out.write(''.join(lines))
 	return
 
 
@@ -42,6 +40,7 @@ def main():
 	args = vars(parser.parse_args())
 	fastq_fn = args['fastq filename']
 	outfn = fastq_fn.split('.fastq')[0] + '_fixed.fastq'
+	print 'output is written in %s' % outfn
 	if fastq_fn.endswith('.gz'):
 		with gzip.open (fastq_fn) as f:
 			correcter(f, outfn)
