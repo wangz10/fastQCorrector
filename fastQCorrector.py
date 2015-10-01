@@ -28,7 +28,7 @@ def _readFourLines(f):
 
 def correcter(f, outfn):
 	# f is the handle of .fastq file or .fastq.gz file
-	with open (outfn, 'wb') as out:
+	with gzip.open (outfn, 'wb') as out:
 		for lines in _readFourLines(f):
 			out.write(''.join(lines))
 	return
@@ -39,8 +39,8 @@ def main():
 	parser.add_argument('fastq filename', help='the name of the fastq file', type=str)
 	args = vars(parser.parse_args())
 	fastq_fn = args['fastq filename']
-	outfn = fastq_fn.split('.fastq')[0] + '_fixed.fastq'
-	print 'output is written in %s' % outfn
+	outfn = fastq_fn.split('.fastq')[0] + '_fixed.fastq.gz'
+	print 'output is being written in %s' % outfn
 	if fastq_fn.endswith('.gz'):
 		with gzip.open (fastq_fn) as f:
 			correcter(f, outfn)
