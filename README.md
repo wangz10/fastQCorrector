@@ -16,8 +16,12 @@ gzip, argparse
 	$ git clone https://github.com/wangz10/fastQCorrector.git
 ```
 
-## usage:
+## Usage:
 
 ```
 	$ python fastQCorrector.py [-h] fastq_filename
+```
+Since this script is written in native Python, one can also run with Pypy for faster run:
+```
+	$ pypy fastQCorrector.py [-h] fastq_filename
 ```
